@@ -1,0 +1,18 @@
+---
+layout: archive
+permalink: /blog/
+title: "Blog"
+author_profile: true
+---
+
+{% include base_path %}
+<div class="category-nav" style="margin-bottom: 2em;">
+  <b>All</b> | 
+  <a href="/blog/gpu/">GPU</a> | 
+  <a href="/blog/architecture/">Computer Architecture</a> | 
+  <a href="/blog/os/">Operating System</a>
+</div>
+
+{% for post in site.posts %}
+  {% include archive-single.html %}
+{% endfor %}
