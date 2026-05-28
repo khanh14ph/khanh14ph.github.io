@@ -11,6 +11,9 @@ main:
   - title: "Background"
     url: /
     
+  - title: "Projects"
+    url: /projects/
+    
   - title: "GPU"
     url: /blog/gpu/
     
