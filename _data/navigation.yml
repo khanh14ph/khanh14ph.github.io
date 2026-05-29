@@ -14,6 +14,9 @@ main:
   - title: "Projects"
     url: /projects/
     
+  - title: "Books/Materials"
+    url: /books/
+    
   - title: "GPU"
     url: /blog/gpu/
     

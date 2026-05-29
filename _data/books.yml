@@ -1,0 +1,11 @@
+- title: "Computer Architecture: A Quantitative Approach"
+  author: "John L. Hennessy, David A. Patterson"
+  type: "Book"
+  link: "https://www.elsevier.com/books/computer-architecture/hennessy/978-0-12-811905-1"
+  description: "The gold standard for computer architecture and design. Essential reading for understanding performance and efficiency."
+
+- title: "CUDA C++ Programming Guide"
+  author: "NVIDIA"
+  type: "Documentation"
+  link: "https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html"
+  description: "The official NVIDIA programming guide for mastering GPU acceleration."

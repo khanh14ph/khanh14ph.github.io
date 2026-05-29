@@ -1,0 +1,29 @@
+---
+layout: archive
+title: "Books & Materials"
+permalink: /books/
+author_profile: true
+---
+
+{% include base_path %}
+
+<div class="materials-container">
+  {% for item in site.data.books %}
+    <div class="archive__item" style="margin-bottom: 2em; padding-bottom: 2em; border-bottom: 1px solid #eee;">
+      <h2 class="archive__item-title" itemprop="headline">
+        {% if item.link %}
+          <a href="{{ item.link }}" target="_blank">{{ item.title }}</a>
+        {% else %}
+          {{ item.title }}
+        {% endif %}
+      </h2>
+      <p class="page__meta">
+        {% if item.type %}<strong><i class="fa fa-fw fa-bookmark" aria-hidden="true"></i> {{ item.type }}</strong>{% endif %}
+        {% if item.author %}&nbsp; | &nbsp;<strong><i class="fa fa-fw fa-user" aria-hidden="true"></i> {{ item.author }}</strong>{% endif %}
+      </p>
+      <div class="item-description">
+        {{ item.description | markdownify }}
+      </div>
+    </div>
+  {% endfor %}
+</div>
