@@ -7,7 +7,7 @@ redirect_from:
   - /about.html
 ---
 
-Hi, I am Khan Nguyen. I am a High Performance Computing (HPC) Engineer with a strong focus on GPU computing and Artificial Intelligence. 
+Hi, I am Khanh Nguyen. I am a High Performance Computing (HPC) Engineer with a strong focus on GPU computing and Artificial Intelligence. 
 
 My work involves optimizing complex algorithms to run efficiently on parallel architectures, leveraging the power of GPUs to accelerate AI workloads, and building scalable HPC infrastructure. 
 
