@@ -23,12 +23,12 @@ repository               : "khanh14ph/khanh14ph.github.io"
 #               Additional customization can be done by editing /_includes/author-profile.html
 author:
   # Biographic information
-  avatar           : "/images/avatar.jpeg"
-  name             : "Khan Nguyen"
+  avatar           : "avatar.jpeg"
+  name             : "Khanh Nguyen"
   pronouns         : # example: "she/her"  
   bio              : "High Performance Computing Engineer, focusing on GPU and AI."
   location         : "Earth"
-  employer         : ""
+  employer         : # 
   uri              : # URL
   email            : "khanh14ph@gmail.com" 
 
