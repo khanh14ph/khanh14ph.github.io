@@ -1,0 +1,17 @@
+---
+layout: archive
+permalink: /research/
+title: "Research Papers"
+author_profile: true
+---
+
+{% include base_path %}
+
+{% assign posts = site.categories["Research"] %}
+{% if posts.size > 0 %}
+  {% for post in posts %}
+    {% include archive-single.html %}
+  {% endfor %}
+{% else %}
+  <p>No posts in this category yet.</p>
+{% endif %}
