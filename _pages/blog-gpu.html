@@ -2,16 +2,7 @@
 layout: archive
 permalink: /blog/gpu/
 title: "Blog: GPU"
-author_profile: true
+category: GPU
 ---
 
-{% include base_path %}
-
-{% assign posts = site.categories["GPU"] %}
-{% if posts.size > 0 %}
-  {% for post in posts %}
-    {% include archive-single.html %}
-  {% endfor %}
-{% else %}
-  <p>No posts in this category yet.</p>
-{% endif %}
+{% include posts-by-category.html %}

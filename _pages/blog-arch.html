@@ -2,16 +2,7 @@
 layout: archive
 permalink: /blog/architecture/
 title: "Blog: Computer Architecture"
-author_profile: true
+category: Computer Architecture
 ---
 
-{% include base_path %}
-
-{% assign posts = site.categories["Computer Architecture"] %}
-{% if posts.size > 0 %}
-  {% for post in posts %}
-    {% include archive-single.html %}
-  {% endfor %}
-{% else %}
-  <p>No posts in this category yet.</p>
-{% endif %}
+{% include posts-by-category.html %}

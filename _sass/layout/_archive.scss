@@ -48,6 +48,17 @@
   }
 }
 
+/* Entries rendered from _data (projects, books) rather than from posts. */
+.archive__item--card {
+  margin-bottom: 2em;
+  padding-bottom: 2em;
+  border-bottom: 1px solid var(--global-border-color);
+
+  &:last-child {
+    border-bottom: 0;
+  }
+}
+
 /* remove border*/
 .page__content {
 

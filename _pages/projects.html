@@ -2,7 +2,6 @@
 layout: archive
 title: "Projects"
 permalink: /projects/
-author_profile: true
 ---
 
 {% include base_path %}
@@ -10,7 +9,7 @@ author_profile: true
 
 <div class="projects-container">
   {% for project in site.data.projects %}
-    <div class="archive__item" style="margin-bottom: 2em; padding-bottom: 2em; border-bottom: 1px solid #eee;">
+    <div class="archive__item archive__item--card">
       <h2 class="archive__item-title" itemprop="headline">{{ project.title }}</h2>
       <p class="page__meta">
         {% if project.date %}<strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> {{ project.date }}</strong>{% endif %}

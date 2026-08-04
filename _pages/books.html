@@ -2,14 +2,13 @@
 layout: archive
 title: "Books & Materials"
 permalink: /books/
-author_profile: true
 ---
 
 {% include base_path %}
 
 <div class="materials-container">
   {% for item in site.data.books %}
-    <div class="archive__item" style="margin-bottom: 2em; padding-bottom: 2em; border-bottom: 1px solid #eee;">
+    <div class="archive__item archive__item--card">
       <h2 class="archive__item-title" itemprop="headline">
         {% if item.link %}
           <a href="{{ item.link }}" target="_blank">{{ item.title }}</a>
