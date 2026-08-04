@@ -9,3 +9,9 @@
   type: "Documentation"
   link: "https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html"
   description: "The official NVIDIA programming guide for mastering GPU acceleration."
+
+- title: "C++ move semantics from scratch"
+  author: "cbarrete.com"
+  type: "Article"
+  link: "https://cbarrete.com/move-from-scratch.html"
+  description: "Derives move semantics from the pre-C++11 problems they were introduced to solve, rather than presenting the rules as given. Frames rvalue references as \"colored\" references whose only job is to let overload resolution tell a copy apart from a move."
