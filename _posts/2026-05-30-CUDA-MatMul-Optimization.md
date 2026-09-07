@@ -42,42 +42,43 @@ The naive implementation is to use 2D blocks, where each thread is responsible f
 The following code snippet shows the naive implementation.
 
 ```cpp
-template <typename T>
-__global__ void gemm_v00(size_t m, size_t n, size_t k, T alpha, T const* A,
-                         size_t lda, T const* B, size_t ldb, T beta, T* C,
-                         size_t ldc)
-{
-    // Compute the row and column of C that this thread is responsible for.
-    size_t const C_row_idx{blockIdx.x * blockDim.x + threadIdx.x};
-    size_t const C_col_idx{blockIdx.y * blockDim.y + threadIdx.y};
-
-    // Each thread compute
-    // C[C_row_idx, C_col_idx] = alpha * A[C_row_idx, :] * B[:, C_col_idx] +
-    // beta * C[C_row_idx, C_col_idx].
-    if (C_row_idx < m && C_col_idx < n)
-    {
-        T sum{static_cast<T>(0)};
-        for (size_t k_idx{0U}; k_idx < k; ++k_idx)
-        {
-            sum += A[C_row_idx * lda + k_idx] * B[k_idx * ldb + C_col_idx];
-        }
-        C[C_row_idx * ldc + C_col_idx] =
-            alpha * sum + beta * C[C_row_idx * ldc + C_col_idx];
-    }
-}
-
-template <typename T>
-void launch_gemm_kernel_v00(size_t m, size_t n, size_t k, T const* alpha,
-                            T const* A, size_t lda, T const* B, size_t ldb,
-                            T const* beta, T* C, size_t ldc,
-                            cudaStream_t stream)
+void launch_gemm_kernel_v0(int m, int n, int k, T const* alpha, T const* A,
+                           int lda, T const* B, int ldb, T const* beta, T* C,
+                           int ldc, cudaStream_t stream)
 {
     dim3 const block_dim{32U, 32U, 1U};
     dim3 const grid_dim{
         (static_cast<unsigned int>(m) + block_dim.x - 1U) / block_dim.x,
         (static_cast<unsigned int>(n) + block_dim.y - 1U) / block_dim.y, 1U};
-    gemm_v00<T><<<grid_dim, block_dim, 0U, stream>>>(m, n, k, *alpha, A, lda, B,
-                                       `              ldb, *beta, C, ldc);
+
+    gemm_v0<T><<<grid_dim, block_dim, 0U, stream>>>(m, n, k, *alpha, A, lda, B,
+                                                    ldb, *beta, C, ldc);
     CHECK_LAST_CUDA_ERROR();
+}
+```
+
+v1:
+```cpp
+template <typename T>
+__global__ void gemm_v1(int m, int n, int k, T alpha, T const* A, int lda,
+                        T const* B, int ldb, T beta, T* C, int ldc)
+{
+    // Transposed thread mapping vs v0: x -> columns (n), y -> rows (m)
+    int const col{static_cast<int>(blockIdx.x * blockDim.x + threadIdx.x)};
+    int const row{static_cast<int>(blockIdx.y * blockDim.y + threadIdx.y)};
+
+    if (row < m && col < n)
+    {
+        T const* A_row{A + static_cast<size_t>(row) * lda};
+        T const* B_col{B + col};
+        T* C_ptr{C + static_cast<size_t>(row) * ldc + col};
+
+        T sum{static_cast<T>(0)};
+        for (int kk{0}; kk < k; ++kk)
+        {
+            sum += A_row[kk] * B_col[static_cast<size_t>(kk) * ldb];
+        }
+        *C_ptr = alpha * sum + beta * *C_ptr;
+    }
 }
 ```
