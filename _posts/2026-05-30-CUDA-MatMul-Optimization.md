@@ -68,7 +68,7 @@ __global__ void gemm_v0(int m, int n, int k, T alpha, T const* A, int lda,
 
 [Benchmark] gemm_v0 | Avg Time: 32.8361 ms  | Performance: 65.4001 TFLOPS
 
-v1:
+v1: Memory coalesced
 ```cpp
 
 template <typename T>
@@ -111,7 +111,7 @@ void launch_gemm_kernel_v1(int m, int n, int k, T const* alpha, T const* A,
 }
 ```
 
-v2:
+v2: Shared mem
 ```cpp
 #define BLOCK_SIZE 32
 template <typename T>
@@ -153,7 +153,7 @@ void launch_gemm_kernel_v2(int m, int n, int k, T const* alpha, T const* A, int 
 }
 ```
 
-v3:
+v3: thread coarsening
 ```cpp
 #define BLOCK_SIZE 32
 template <typename T>
