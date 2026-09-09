@@ -15,3 +15,9 @@
   type: "Article"
   link: "https://cbarrete.com/move-from-scratch.html"
   description: "Derives move semantics from the pre-C++11 problems they were introduced to solve, rather than presenting the rules as given. Frames rvalue references as \"colored\" references whose only job is to let overload resolution tell a copy apart from a move."
+
+- title: "Language Modeling by Estimating the Ratios of the Data Distribution"
+  author: "Aaron Lou"
+  type: "Article"
+  link: "https://aaronlou.com/blog/2024/discrete-diffusion/"
+  description: "Introduces Score Entropy Discrete Diffusion (SEDD) as an alternative to autoregressive language modeling. Instead of predicting tokens left to right, the model learns ratios between neighboring points of the data distribution and denoises random text via a continuous-time Markov chain, reaching GPT-2-scale quality while allowing arbitrary-order infilling."
