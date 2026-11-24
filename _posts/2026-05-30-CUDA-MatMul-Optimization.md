@@ -19,22 +19,21 @@ One thread per element of $$C$$, in $$32 \times 32$$ blocks, with `threadIdx.x` 
 
 ```cpp
 template <typename T>
-__global__ void gemm_v0(int m, int n, int k, T alpha, T const* A, int lda,
-                        T const* B, int ldb, T beta, T* C, int ldc)
+__global__ void gemm_v0(int m, int n, int k, T alpha, T const* A, T const* B, T beta, T* C)
 {
     int const row = blockIdx.x * blockDim.x + threadIdx.x;
     int const col = blockIdx.y * blockDim.y + threadIdx.y;
 
     if (row < m && col < n)
     {
-        T const* A_row{A + row * lda};
+        T const* A_row{A + row * k};
         T const* B_col{B + col};
-        T* C_ptr{C + row * ldc + col};
+        T* C_ptr{C + row * n + col};
 
         T sum{0};
         for (int kk{0}; kk < k; ++kk)
         {
-            sum += A_row[kk] * B_col[kk * ldb];
+            sum += A_row[kk] * B_col[kk * n];
         }
         *C_ptr = alpha * sum + beta * *C_ptr;
     }
@@ -49,22 +48,21 @@ Swap the mapping so `threadIdx.x` selects the column (and swap the grid to match
 
 ```cpp
 template <typename T>
-__global__ void gemm_v1(int m, int n, int k, T alpha, T const* A, int lda,
-                        T const* B, int ldb, T beta, T* C, int ldc)
+__global__ void gemm_v1(int m, int n, int k, T alpha, T const* A, T const* B, T beta, T* C)
 {
     int const col = blockIdx.x * blockDim.x + threadIdx.x;
     int const row = blockIdx.y * blockDim.y + threadIdx.y;
 
     if (row < m && col < n)
     {
-        T const* A_row{A + row * lda};
+        T const* A_row{A + row * k};
         T const* B_col{B + col};
-        T* C_ptr{C + row * ldc + col};
+        T* C_ptr{C + row * n + col};
 
         T sum{0};
         for (int kk{0}; kk < k; ++kk)
         {
-            sum += A_row[kk] * B_col[kk * ldb];
+            sum += A_row[kk] * B_col[kk * n];
         }
         *C_ptr = alpha * sum + beta * *C_ptr;
     }
@@ -80,30 +78,30 @@ Each block computes a $$32 \times 32$$ tile of $$C$$. At each step along $$K$$, 
 ```cpp
 #define BLOCK_SIZE 32
 template <typename T>
-__global__ void gemm_v2(int m, int n, int k, T alpha, T const* A, int lda, T const* B, int ldb, T beta,  T* C, int ldc){
+__global__ void gemm_v2(int m, int n, int k, T alpha, T const* A, T const* B, T beta,  T* C){
 
     __shared__ T A_shared[BLOCK_SIZE*BLOCK_SIZE];
     __shared__ T B_shared[BLOCK_SIZE*BLOCK_SIZE];
     int tid_col=threadIdx.x;
     int tid_row=threadIdx.y;
 
-    A+=BLOCK_SIZE*blockIdx.x*lda;
+    A+=BLOCK_SIZE*blockIdx.x*k;
     B+=BLOCK_SIZE*blockIdx.y;
-    C+=BLOCK_SIZE*blockIdx.x*ldc+BLOCK_SIZE*blockIdx.y;
+    C+=BLOCK_SIZE*blockIdx.x*n+BLOCK_SIZE*blockIdx.y;
     T sum=0;
     for (int kk=0;kk<k;kk+=BLOCK_SIZE){
-        A_shared[tid_row*BLOCK_SIZE+tid_col]=A[tid_col+tid_row*lda];
-        B_shared[tid_row*BLOCK_SIZE+tid_col]=B[tid_col+tid_row*ldb];
+        A_shared[tid_row*BLOCK_SIZE+tid_col]=A[tid_col+tid_row*k];
+        B_shared[tid_row*BLOCK_SIZE+tid_col]=B[tid_col+tid_row*n];
         __syncthreads();
         A+=BLOCK_SIZE;
-        B+=BLOCK_SIZE*ldb;
+        B+=BLOCK_SIZE*n;
 
         for (int i=0;i<BLOCK_SIZE;i++){
             sum+=A_shared[tid_row*BLOCK_SIZE+i]*B_shared[tid_col+i*BLOCK_SIZE];
         }
         __syncthreads();
     }
-    C[tid_row*ldc+tid_col]=alpha*sum+beta*C[tid_row*ldc+tid_col];
+    C[tid_row*n+tid_col]=alpha*sum+beta*C[tid_row*n+tid_col];
 }
 ```
 
@@ -117,8 +115,7 @@ Each block computes a $$64 \times 64$$ tile, stepping through $$K$$ by 8, and ea
 // Launched with BM = BN = 64, BK = 8, TM = 8: 512 threads per block.
 // Requires m % BM == 0, n % BN == 0, k % BK == 0.
 template <typename T, int BM, int BN, int BK, int TM>
-__global__ void gemm_v3(int m, int n, int k, T alpha, T const* A, int lda,
-                        T const* B, int ldb, T beta, T* C, int ldc) {
+__global__ void gemm_v3(int m, int n, int k, T alpha, T const* A, T const* B, T beta, T* C) {
     constexpr int NT = BM * BN / TM;  // threads per block
     __shared__ T A_shared[BM * BK];
     __shared__ T B_shared[BK * BN];
@@ -126,9 +123,9 @@ __global__ void gemm_v3(int m, int n, int k, T alpha, T const* A, int lda,
     int const threadRow = tid / BN;
     int const threadCol = tid % BN;
 
-    A += BM * blockIdx.x * lda;
+    A += BM * blockIdx.x * k;
     B += BN * blockIdx.y;
-    C += BM * blockIdx.x * ldc + BN * blockIdx.y;
+    C += BM * blockIdx.x * n + BN * blockIdx.y;
 
     T threadResult[TM] = {0};
 
@@ -136,18 +133,18 @@ __global__ void gemm_v3(int m, int n, int k, T alpha, T const* A, int lda,
         for (int s = 0; s < (BM * BK) / NT; ++s) {
             int const idx = tid + s * NT;
             int const r = idx / BK, c = idx % BK;
-            A_shared[r * BK + c] = A[r * lda + c];
+            A_shared[r * BK + c] = A[r * k + c];
         }
 
         for (int s = 0; s < (BK * BN) / NT; ++s) {
             int const idx = tid + s * NT;
             int const r = idx / BN, c = idx % BN;
-            B_shared[r * BN + c] = B[r * ldb + c];
+            B_shared[r * BN + c] = B[r * n + c];
         }
         __syncthreads();
 
         A += BK;
-        B += BK * ldb;
+        B += BK * n;
 
         for (int i = 0; i < BK; ++i) {
             T const B_cell = B_shared[i * BN + threadCol];
@@ -160,7 +157,7 @@ __global__ void gemm_v3(int m, int n, int k, T alpha, T const* A, int lda,
 
     for (int r = 0; r < TM; ++r) {
         int const row = threadRow * TM + r;
-        C[row * ldc + threadCol] = alpha * threadResult[r] + beta * C[row * ldc + threadCol];
+        C[row * n + threadCol] = alpha * threadResult[r] + beta * C[row * n + threadCol];
     }
 }
 ```
