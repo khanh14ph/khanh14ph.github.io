@@ -15,4 +15,4 @@ redirect_from:
   - /books/
 ---
 
-Hi, I am Khanh Nguyen.
+Hi, I am Khanh Nguyen. I write things down to find out whether I really understand them.
