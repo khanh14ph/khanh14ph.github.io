@@ -2,15 +2,16 @@
 layout: default
 ---
 
-<h1>{{ page.title | default: site.title }}</h1>
+<div class="lede">
+  {{ content }}
+</div>
 
-{{ content }}
-
-<ul class="content-listing">
+<ul class="posts">
   {%- for post in site.posts %}
   <li>
+    <time class="gutter" datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%Y-%m-%d" }}</time>
     <h2><a href="{{ post.url | relative_url }}">{{ post.title | markdownify | remove: "<p>" | remove: "</p>" | strip }}</a></h2>
-    {{ post.excerpt }}
+    <div class="excerpt">{{ post.excerpt }}</div>
   </li>
   {%- endfor %}
 </ul>

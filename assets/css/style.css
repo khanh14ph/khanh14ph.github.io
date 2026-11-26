@@ -1,60 +1,185 @@
 /*
- * A small Tufte-style stylesheet: cream page, ET Book serif, one red accent,
- * a text column on the left and a wide right margin reserved for sidenotes.
+ * A worklog. Three tracks across the page:
+ *
+ *   gutter  |  text                     margin
+ *   dates   |  prose, one narrow column sidenotes; code runs out into it
+ *
+ * The rule between the gutter and the text is the margin line of a logbook.
+ * Colours come from a circuit board: silkscreen white, solder-mask green and
+ * a little copper.
  */
 
-/* ---------- Fonts (ET Book, MIT licensed, see assets/fonts/et-book/LICENSE) */
+/* ---------- Fonts (IBM Plex, OFL 1.1, see assets/fonts/plex/LICENSE.txt) */
 
 @font-face {
-  font-family: "et-book";
-  src: url("../fonts/et-book/et-book-roman-line-figures.woff") format("woff");
-  font-weight: normal;
+  font-family: "IBM Plex Sans";
+  src: url("../fonts/plex/ibm-plex-sans-latin-400-normal.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "IBM Plex Sans";
+  src: url("../fonts/plex/ibm-plex-sans-latin-400-italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "IBM Plex Sans";
+  src: url("../fonts/plex/ibm-plex-sans-latin-600-normal.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "IBM Plex Serif";
+  src: url("../fonts/plex/ibm-plex-serif-latin-400-normal.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "IBM Plex Serif";
+  src: url("../fonts/plex/ibm-plex-serif-latin-500-normal.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "IBM Plex Mono";
+  src: url("../fonts/plex/ibm-plex-mono-latin-400-normal.woff2") format("woff2");
+  font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: "et-book";
-  src: url("../fonts/et-book/et-book-display-italic-old-style-figures.woff") format("woff");
-  font-weight: normal;
+  font-family: "IBM Plex Mono";
+  src: url("../fonts/plex/ibm-plex-mono-latin-400-italic.woff2") format("woff2");
+  font-weight: 400;
   font-style: italic;
   font-display: swap;
 }
 
 @font-face {
-  font-family: "et-book";
-  src: url("../fonts/et-book/et-book-bold-line-figures.woff") format("woff");
-  font-weight: bold;
+  font-family: "IBM Plex Mono";
+  src: url("../fonts/plex/ibm-plex-mono-latin-600-normal.woff2") format("woff2");
+  font-weight: 600;
   font-style: normal;
   font-display: swap;
 }
 
+/* Vietnamese letters, fetched only by pages that use them. */
+
 @font-face {
-  font-family: "et-book-roman-old-style";
-  src: url("../fonts/et-book/et-book-roman-old-style-figures.woff") format("woff");
-  font-weight: normal;
+  font-family: "IBM Plex Sans";
+  src: url("../fonts/plex/ibm-plex-sans-vietnamese-400-normal.woff2") format("woff2");
+  font-weight: 400;
   font-style: normal;
   font-display: swap;
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+
+@font-face {
+  font-family: "IBM Plex Sans";
+  src: url("../fonts/plex/ibm-plex-sans-vietnamese-400-italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+
+@font-face {
+  font-family: "IBM Plex Sans";
+  src: url("../fonts/plex/ibm-plex-sans-vietnamese-600-normal.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+
+@font-face {
+  font-family: "IBM Plex Serif";
+  src: url("../fonts/plex/ibm-plex-serif-vietnamese-400-normal.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+
+@font-face {
+  font-family: "IBM Plex Serif";
+  src: url("../fonts/plex/ibm-plex-serif-vietnamese-500-normal.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
 }
 
 /* ---------- Tokens */
 
 :root {
-  --bg: #fffff8;
-  --text: #111;
-  --muted: #555;
-  --accent: #a00000;
-  --rule: #333;
-  --stripe: #fbf7f0;
-  --code-bg: #fff;
-  --code-border: #999;
+  color-scheme: light dark;
 
-  --serif: et-book, Palatino, "Palatino Linotype", "Palatino LT STD", "Book Antiqua", Georgia, serif;
-  --sans: "Gill Sans", "Gill Sans MT", Lato, Calibri, sans-serif;
-  --mono: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  --paper: #f8faf7;
+  --ink: #18211c;
+  --muted: #5c6a62;
+  --green: #0d6b4c;
+  --copper: #a04f17;
+  --rule: #d3dbd2;
+  --tile: #c3cdc3;
+  --code-bg: #edf1eb;
 
-  /* The text column is this share of the page; the rest is margin. */
-  --column: 55%;
+  --sans: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --serif: "IBM Plex Serif", Georgia, serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+
+  /* Track widths. The margin track only exists on wide screens. */
+  --pad: 1.5rem;
+  --gutter: 0rem;
+  --gap: 0rem;
+  --measure: 40rem;
+  --margin: 0rem;
+  /* How far code and figures may run past the text column. */
+  --bleed: 0rem;
+}
+
+@media (min-width: 800px) {
+  :root {
+    --gutter: 6.5rem;
+    --gap: 2.5rem;
+  }
+}
+
+@media (min-width: 1120px) {
+  :root {
+    --margin: 15rem;
+    --bleed: calc(var(--margin) + var(--gap));
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #121714;
+    --ink: #e2e8e3;
+    --muted: #98a59c;
+    --green: #62c79c;
+    --copper: #e0935a;
+    --rule: #29322c;
+    --tile: #36423a;
+    --code-bg: #19201c;
+  }
 }
 
 /* ---------- Base */
@@ -63,450 +188,565 @@
 *::before,
 *::after {
   box-sizing: border-box;
-  margin: 0;
 }
 
-/* Everything below is sized in rem, so the whole page scales with the viewport. */
 html {
-  font-size: 75%;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
 
-@media (min-width: 900px) {
-  html { font-size: 81.25%; }
-}
-
-@media (min-width: 1100px) {
-  html { font-size: 87.5%; }
-}
-
 body {
-  width: 100%;
-  max-width: 1600px;
-  margin: 0 auto;
-  padding-left: 10.5%;
-  font-family: var(--serif);
-  background-color: var(--bg);
-  color: var(--text);
-  counter-reset: sidenote-counter;
+  margin: 0;
+  font-family: var(--sans);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  color: var(--ink);
+  background: var(--paper);
+  counter-reset: sidenote;
 }
 
 ::selection {
-  background: #b4d5fe;
+  background: color-mix(in srgb, var(--green) 22%, transparent);
+}
+
+a {
+  color: var(--green);
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
+  text-underline-offset: 0.2em;
+}
+
+a:hover {
+  text-decoration-color: currentColor;
+}
+
+a:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ---------- Tracks */
+
+.page {
+  position: relative;
+  max-width: calc(var(--gutter) + var(--gap) + var(--measure) + var(--gap) + var(--margin) + 2 * var(--pad));
+  min-height: 100vh;
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding: 0 var(--pad);
+}
+
+.site-header,
+main,
+.site-footer {
+  position: relative;
+  max-width: var(--measure);
+  margin-left: calc(var(--gutter) + var(--gap));
+}
+
+/* Anything with this class sits in the gutter, beside its positioned parent. */
+.gutter {
+  color: var(--muted);
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+@media (min-width: 800px) {
+  /* The margin line. */
+  .page::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(var(--pad) + var(--gutter) + var(--gap) / 2);
+    width: 1px;
+    background: var(--rule);
+  }
+
+  .gutter,
+  .site-mark {
+    position: absolute;
+    right: calc(100% + var(--gap));
+    width: var(--gutter);
+    text-align: right;
+  }
 }
 
 /* ---------- Header and footer */
 
-header nav {
+.site-header {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 2.4rem;
-  padding-top: 3.5rem;
+  align-items: center;
+  gap: 0.7rem;
+  padding-top: 2.75rem;
+  margin-bottom: 3.5rem;
 }
 
-header nav a,
-.credits a {
-  font-family: var(--sans);
-  font-size: 1.2rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--accent);
+.site-mark {
+  display: block;
+  line-height: 0;
 }
 
-header nav a.active::before { content: "<"; }
-header nav a.active::after { content: ">"; }
-
-footer {
-  width: var(--column);
-  padding-bottom: 4rem;
+.mark {
+  display: inline-block;
+  width: 1.625rem;
+  height: 1.625rem;
 }
 
-.credits {
-  display: flex;
-  justify-content: center;
-  gap: 2.4rem;
+.mark-rest { fill: var(--tile); }
+.mark-row,
+.mark-col { fill: var(--green); }
+.mark-hit { fill: var(--copper); }
+
+/*
+ * On the homepage the mark works the product out once: the row and the column
+ * are read off a tile at a time, then the cell where they meet is written.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .home .mark-row,
+  .home .mark-col {
+    animation: mark-read 0.3s both;
+    animation-delay: calc(var(--k) * 110ms + 250ms);
+  }
+
+  .home .mark-hit {
+    animation: mark-write 0.4s both;
+    animation-delay: 800ms;
+  }
+}
+
+@keyframes mark-read {
+  from { fill: var(--tile); }
+}
+
+@keyframes mark-write {
+  from { fill: var(--green); }
+}
+
+.site-name {
   margin: 0;
-}
-
-.credits a {
   font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.625rem;
+}
+
+.site-name a {
+  color: var(--ink);
   text-decoration: none;
 }
 
-/* ---------- Text */
-
-article {
-  position: relative;
-  width: var(--column);
-  padding: 5rem 0;
-  /* Matches paragraph text, so display math and other bare blocks size the same. */
-  font-size: 1.4rem;
-  line-height: 2rem;
+.site-header nav {
+  margin-left: auto;
 }
 
-h1,
-h2,
-h3,
-h4 {
-  font-weight: 400;
-  text-wrap: balance;
-}
-
-h1 {
-  margin-top: 1.568rem;
-  margin-bottom: 1.568rem;
-  font-size: 2.5rem;
-  line-height: 1.184;
-}
-
-h2 {
-  margin-top: 2.8rem;
-  margin-bottom: 0;
-  font-size: 2.1rem;
-  line-height: 1.15;
-}
-
-h3 {
-  margin-top: 2.2rem;
-  margin-bottom: 0;
-  font-size: 1.8rem;
-  font-style: italic;
-  line-height: 1.1;
-}
-
-h4 {
-  margin-top: 1.8rem;
-  margin-bottom: 0;
-  font-size: 1.4rem;
-  font-style: italic;
-  line-height: 1.4;
-}
-
-p,
-ol,
-ul,
-dl {
-  margin: 1.4rem 0;
-  font-size: 1.4rem;
-  line-height: 2rem;
-}
-
-p,
-li {
-  text-align: justify;
-  hyphens: auto;
-  -webkit-hyphens: auto;
-}
-
-ol,
-ul {
-  padding-left: 6%;
-}
-
-li {
-  margin-bottom: 0.5em;
-}
-
-li > ul,
-li > ol {
-  margin: 0.5em 0 0;
-}
-
-li > p {
-  margin: 0.7rem 0;
-}
-
-strong {
-  font-weight: bold;
-}
-
-hr {
-  height: 1px;
-  margin: 2.8rem 0;
-  border: 0;
-  background-image: linear-gradient(to right, transparent, rgba(0, 0, 0, 0.75), transparent);
-}
-
-footer hr {
-  margin: 1.4rem 0;
-}
-
-blockquote {
-  margin: 1.4rem 0;
-  padding: 0 2.8rem;
-}
-
-blockquote p {
-  font-size: 1.3rem;
-  line-height: 1.9rem;
-}
-
-img {
-  max-width: 100%;
-  height: auto;
-}
-
-p:has(> img:only-child) {
-  text-align: center;
-}
-
-figure {
-  margin: 2.8rem 0;
-}
-
-figcaption {
-  margin-top: 0.5rem;
-  font-size: 1.1rem;
-  line-height: 1.6;
+.site-header nav a,
+.site-footer a {
   color: var(--muted);
-}
-
-/* ---------- Links */
-
-a {
-  color: var(--accent);
+  font-size: 0.9375rem;
   text-decoration: none;
 }
 
-/* Links in running text keep the text colour and get a hairline underline. */
-p > a,
-li > a,
-td > a,
-dd > a {
-  color: inherit;
+.site-header nav a:hover,
+.site-footer a:hover,
+.site-name a:hover {
+  color: var(--green);
+}
+
+.site-header nav a[aria-current] {
+  color: var(--ink);
   text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.18em;
+  text-decoration-color: var(--copper);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.4em;
 }
 
-a:hover {
-  color: var(--accent);
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.18em;
+.site-footer {
+  display: flex;
+  gap: 1.75rem;
+  margin-top: 5rem;
+  padding-bottom: 3rem;
 }
 
-a:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-  border-radius: 2px;
+/* ---------- Homepage */
+
+.lede {
+  margin-bottom: 4rem;
+  font-family: var(--serif);
+  font-size: 1.5rem;
+  line-height: 1.45;
+  text-wrap: pretty;
 }
 
-/* ---------- Homepage listing */
+.lede p {
+  margin: 0 0 1rem;
+}
 
-.content-listing {
+.posts {
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.content-listing li {
-  margin: 0;
-  padding-top: 1.4rem;
+.posts li {
+  position: relative;
+  margin-bottom: 2.5rem;
 }
 
-.content-listing h2 {
-  margin-top: 1.4rem;
-  line-height: 1.2;
-  text-wrap: pretty;
+.posts h2 {
+  margin: 0 0 0.4rem;
+  font-family: var(--serif);
+  font-size: 1.375rem;
+  font-weight: 500;
+  line-height: 1.3;
+  text-wrap: balance;
+}
+
+.posts h2 a {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.posts h2 a:hover {
+  color: var(--green);
+}
+
+/* The date sits on the first line of the title it belongs to. */
+.posts .gutter {
+  line-height: calc(1.375rem * 1.3);
+  padding-top: 0.1rem;
+}
+
+.excerpt {
+  color: var(--muted);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+.excerpt p {
+  margin: 0;
+}
+
+.excerpt a {
+  color: inherit;
 }
 
 /* Sidenotes belong to the post itself, not to its excerpt. */
-.content-listing .sidenote,
-.content-listing .margin-toggle {
+.excerpt .sidenote,
+.excerpt .margin-toggle {
   display: none;
 }
 
-/* ---------- Post header */
+/* ---------- Posts and pages */
 
-.post-date {
-  text-align: right;
+.post-header {
+  position: relative;
+}
+
+.post-header .gutter {
+  line-height: calc(2.25rem * 1.2);
+  padding-top: 0.45rem;
+}
+
+h1 {
+  margin: 0 0 2rem;
+  font-family: var(--serif);
+  font-size: 2.25rem;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+h1.site-name {
+  font-family: var(--sans);
+  letter-spacing: 0;
+}
+
+.prose h2 {
+  margin: 3rem 0 0.75rem;
+  font-family: var(--serif);
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 1.3;
+  text-wrap: balance;
+}
+
+.prose h3 {
+  margin: 2.25rem 0 0.5rem;
+  font-size: 1.1875rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.prose h4 {
+  margin: 1.75rem 0 0.5rem;
+  font-size: 1.0625rem;
+  font-weight: 600;
+}
+
+.prose p,
+.prose ul,
+.prose ol,
+.prose dl {
+  margin: 0 0 1.15rem;
+}
+
+.prose ul,
+.prose ol {
+  padding-left: 1.4rem;
+}
+
+.prose li {
+  margin-bottom: 0.3rem;
+}
+
+.prose li > ul,
+.prose li > ol {
+  margin: 0.3rem 0 0;
+}
+
+.prose li > p {
+  margin-bottom: 0.5rem;
+}
+
+.prose li::marker {
+  color: var(--muted);
+}
+
+.prose strong {
+  font-weight: 600;
+}
+
+.prose hr {
+  height: 1px;
+  margin: 2.75rem 0;
+  border: 0;
+  background: var(--rule);
+}
+
+.prose blockquote {
+  margin: 1.5rem 0;
+  padding-left: 1.25rem;
+  border-left: 2px solid var(--copper);
+}
+
+.prose blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+/* ---------- Figures: wide ones may run out into the margin */
+
+.prose img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+}
+
+.prose p:has(> img:only-child) {
+  clear: both;
+  margin: 1.75rem 0;
+}
+
+.prose p:has(> img:only-child) img {
+  display: block;
+  max-width: calc(100% + var(--bleed));
+}
+
+.prose figure {
+  clear: both;
+  margin: 1.75rem 0;
+}
+
+.prose figcaption {
+  margin-top: 0.5rem;
+  color: var(--muted);
+  font-size: 0.875rem;
 }
 
 /* ---------- Code */
 
-pre,
-code {
-  font-family: var(--mono);
-  font-size: 1rem;
-  line-height: 1.42;
-  hyphens: none;
-  -webkit-hyphens: none;
-}
-
-/* Inline code sits in 1.4rem text, so it needs to be a little larger than a block. */
-p > code,
-li > code,
-td > code,
-a > code,
-strong > code,
-em > code {
-  font-size: 0.8em;
-}
-
-h2 code,
-h3 code {
-  font-size: 0.8em;
-}
-
+code,
 pre {
-  margin: 1.4rem 0;
-  padding: 0.7rem 0.9rem;
-  overflow-x: auto;
-  text-align: left;
+  font-family: var(--mono);
+  font-variant-ligatures: none;
+}
+
+/* Inline code */
+code {
+  padding: 0.1em 0.25em;
+  font-size: 0.875em;
   background: var(--code-bg);
-  border: 1.5px solid var(--code-border);
-  border-radius: 4px;
+  border-radius: 3px;
+}
+
+/*
+ * A block is as wide as its longest line: at least the text column, and at
+ * most the column plus the margin. Past that it scrolls.
+ */
+pre {
+  clear: both;
+  width: max-content;
+  min-width: 100%;
+  max-width: calc(100% + var(--bleed));
+  margin: 1.5rem 0;
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+  font-size: 0.84375rem;
+  line-height: 1.6;
+  background: var(--code-bg);
+  border-radius: 6px;
   tab-size: 4;
 }
 
-/* Rouge token colours */
+pre code {
+  padding: 0;
+  font-size: inherit;
+  background: none;
+  border-radius: 0;
+}
+
+/* Rouge tokens, drawn with the page's own two colours. */
 .highlight .c, .highlight .ch, .highlight .cd, .highlight .cm, .highlight .cpf,
-.highlight .c1 { color: #8a8a78; font-style: italic; }
-.highlight .cp, .highlight .cs { color: #777; font-weight: bold; }
-.highlight .err { color: inherit; background: none; }
+.highlight .c1, .highlight .cs { color: var(--muted); font-style: italic; }
+.highlight .cp { color: var(--muted); font-weight: 600; }
 .highlight .k, .highlight .kc, .highlight .kd, .highlight .kn, .highlight .kp,
-.highlight .kr, .highlight .kv, .highlight .o, .highlight .ow { font-weight: bold; }
-.highlight .kt, .highlight .nc { color: #445588; font-weight: bold; }
-.highlight .m, .highlight .mb, .highlight .mf, .highlight .mh, .highlight .mi,
-.highlight .il, .highlight .mo, .highlight .mx { color: #007a7a; }
+.highlight .kr, .highlight .kv, .highlight .ow { font-weight: 600; }
+.highlight .kt, .highlight .nc, .highlight .nb, .highlight .bp,
+.highlight .nt { color: var(--green); }
+.highlight .nf, .highlight .fm, .highlight .ne { font-weight: 600; }
 .highlight .s, .highlight .sa, .highlight .sb, .highlight .sc, .highlight .dl,
 .highlight .sd, .highlight .s2, .highlight .se, .highlight .sh, .highlight .si,
-.highlight .sx, .highlight .s1 { color: #c41a3a; }
-.highlight .sr { color: #00802b; }
-.highlight .ss { color: #990073; }
+.highlight .sx, .highlight .s1, .highlight .sr, .highlight .ss,
+.highlight .m, .highlight .mb, .highlight .mf, .highlight .mh, .highlight .mi,
+.highlight .il, .highlight .mo, .highlight .mx { color: var(--copper); }
 .highlight .na, .highlight .no, .highlight .nv, .highlight .vc, .highlight .vg,
-.highlight .vi { color: #007a7a; }
-.highlight .nb { color: #0077a3; }
-.highlight .ne, .highlight .nf, .highlight .fm { color: #990000; font-weight: bold; }
-.highlight .nn { color: #555; }
-.highlight .nt { color: #000080; }
-.highlight .ni { color: #800080; }
-.highlight .bp { color: #777; }
-.highlight .gd { background-color: #ffdddd; }
-.highlight .gi { background-color: #ddffdd; }
+.highlight .vi { color: var(--green); }
+.highlight .gd { color: var(--copper); }
+.highlight .gi { color: var(--green); }
 .highlight .ge { font-style: italic; }
-.highlight .gs { font-weight: bold; }
-.highlight .gh, .highlight .gu { color: #777; }
-.highlight .go { color: #777; }
-.highlight .gp { color: #555; }
+.highlight .gs { font-weight: 600; }
+.highlight .gh, .highlight .gu, .highlight .go, .highlight .gp { color: var(--muted); }
+
+/* A rendered Mermaid diagram is a figure, not a code listing. */
+pre:has(> code.language-mermaid) {
+  width: auto;
+  padding: 0;
+  text-align: center;
+  background: none;
+}
 
 /* ---------- Tables */
 
-table {
+.prose table {
   display: block;
   width: max-content;
   max-width: 100%;
-  margin: 2.1rem auto;
+  margin: 1.75rem 0;
   overflow-x: auto;
-  border-top: 2px solid var(--rule);
-  border-bottom: 2px solid var(--rule);
   border-collapse: collapse;
-  border-spacing: 0;
-}
-
-th,
-td {
-  padding: 0.3rem 1rem;
-  font-size: 1.2rem;
-  line-height: 1.7;
-  text-align: left;
+  font-size: 0.9375rem;
   font-variant-numeric: tabular-nums;
 }
 
-th {
-  font-weight: normal;
-  border-bottom: 1px solid var(--rule);
+.prose th,
+.prose td {
+  padding: 0.45rem 1.5rem 0.45rem 0;
+  text-align: left;
+  vertical-align: top;
 }
 
-tbody tr:nth-child(odd) {
-  background-color: var(--stripe);
+.prose th:last-child,
+.prose td:last-child {
+  padding-right: 0;
+}
+
+.prose th {
+  font-weight: 600;
+  border-bottom: 1.5px solid var(--ink);
+}
+
+.prose td {
+  border-bottom: 1px solid var(--rule);
 }
 
 /* ---------- Sidenotes
  *
- * The sidenote include (_includes/sidenote.html) puts a numbered note in the
- * right margin. On narrow screens the note is hidden until its number is tapped.
+ * The sidenote include (_includes/sidenote.html) writes a numbered note. On
+ * wide screens it sits in the margin; otherwise it opens when its number is
+ * tapped.
  */
 
-.sidenote,
-.marginnote {
-  float: right;
-  clear: right;
-  position: relative;
-  width: 50%;
-  margin-top: 0.3rem;
-  margin-right: -60%;
-  margin-bottom: 1.4rem;
-  font-size: 1.1rem;
-  line-height: 1.4;
-  text-align: left;
-  hyphens: manual;
-  -webkit-hyphens: manual;
-}
-
-li .sidenote,
-li .marginnote {
-  margin-right: -64%;
-}
-
 .sidenote-number {
-  counter-increment: sidenote-counter;
-}
-
-.sidenote-number::after,
-.sidenote::before {
-  font-family: "et-book-roman-old-style", var(--serif);
-  color: var(--accent);
-  position: relative;
-  vertical-align: baseline;
+  counter-increment: sidenote;
+  cursor: pointer;
 }
 
 .sidenote-number::after {
-  content: counter(sidenote-counter);
-  top: -0.5rem;
-  left: 0.1rem;
-  font-size: 1rem;
+  content: counter(sidenote);
+  position: relative;
+  top: -0.5em;
+  margin-left: 0.1em;
+  color: var(--copper);
+  font-size: 0.75em;
+  font-weight: 600;
+}
+
+.sidenote {
+  display: none;
+  margin: 0.75rem 0;
+  padding-left: 1rem;
+  border-left: 2px solid var(--rule);
+  color: var(--muted);
+  font-size: 0.875rem;
+  line-height: 1.5;
 }
 
 .sidenote::before {
-  content: counter(sidenote-counter) ". ";
-}
-
-.sidenote a,
-.marginnote a {
-  color: var(--accent);
+  content: counter(sidenote) " ";
+  color: var(--copper);
+  font-weight: 600;
 }
 
 input.margin-toggle {
   display: none;
 }
 
-/* Kramdown footnotes ([^1]) collect at the end of the post. */
-.footnotes {
-  margin-top: 4.2rem;
+.margin-toggle:checked + .sidenote {
+  display: block;
 }
 
-.footnotes p,
-.footnotes ol {
-  font-size: 1.2rem;
-  line-height: 1.7rem;
+@media (min-width: 1120px) {
+  .sidenote-number {
+    cursor: auto;
+  }
+
+  .sidenote,
+  .margin-toggle:checked + .sidenote {
+    display: block;
+    float: right;
+    clear: right;
+    width: var(--margin);
+    margin: 0.25rem calc(-1 * (var(--margin) + var(--gap))) 1rem 0;
+    padding-left: 0;
+    border-left: 0;
+  }
+}
+
+/* Kramdown footnotes ([^1]) collect at the end of the post. */
+.footnotes {
+  margin-top: 3.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--rule);
+  color: var(--muted);
+  font-size: 0.9375rem;
 }
 
 sup {
-  font-size: 0.7em;
+  font-size: 0.75em;
   line-height: 0;
-}
-
-/* A rendered Mermaid diagram is a figure, not a code listing. */
-pre:has(> code.language-mermaid) {
-  padding: 0;
-  text-align: center;
-  background: none;
-  border: 0;
 }
 
 /* ---------- Math */
@@ -518,75 +758,42 @@ mjx-container[display="true"] {
   padding: 0.2rem 0;
 }
 
-/* ---------- Narrow screens */
+/* ---------- Narrow screens: no gutter, so dates move above their titles */
 
-@media (max-width: 760px) {
-  html { font-size: 81.25%; }
-
-  body {
-    padding: 0 6%;
+@media (max-width: 799.98px) {
+  .site-header {
+    padding-top: 1.75rem;
+    margin-bottom: 2.5rem;
   }
 
-  header nav {
-    padding-top: 2.4rem;
+  .lede {
+    margin-bottom: 3rem;
+    font-size: 1.3125rem;
   }
 
-  article,
-  footer {
-    width: 100%;
-  }
-
-  article {
-    padding: 3rem 0;
-  }
-
-  p,
-  li {
-    text-align: left;
-  }
-
-  blockquote {
-    padding: 0 1.4rem;
-  }
-
-  label.margin-toggle {
-    cursor: pointer;
-  }
-
-  .sidenote,
-  .marginnote,
-  li .sidenote,
-  li .marginnote {
-    display: none;
-    float: left;
-    clear: both;
-    width: 100%;
-    margin: 1rem 0;
-    padding: 0 5%;
-  }
-
-  .margin-toggle:checked + .sidenote,
-  .margin-toggle:checked + .marginnote {
+  .gutter {
     display: block;
+    margin-bottom: 0.25rem;
+  }
+
+  .posts .gutter,
+  .post-header .gutter {
+    line-height: 1.5;
+    padding-top: 0;
+  }
+
+  h1 {
+    font-size: 1.875rem;
   }
 }
 
 /* ---------- Print */
 
 @media print {
-  body {
-    padding: 0;
-    background: none;
-  }
-
-  header,
-  footer {
+  .page::before,
+  .site-header nav,
+  .site-footer {
     display: none;
-  }
-
-  article {
-    width: 100%;
-    padding: 0;
   }
 
   pre,

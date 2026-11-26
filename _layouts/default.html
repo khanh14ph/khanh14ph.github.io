@@ -3,25 +3,29 @@
   <head>
     {% include head.html %}
   </head>
-  <body>
-    <header>
-      <nav>
-        <a href="{{ '/' | relative_url }}"{% if page.url == "/" %} class="active" aria-current="page"{% endif %}>{{ site.title }}</a>
-        <a href="{{ '/about/' | relative_url }}"{% if page.url == "/about/" %} class="active" aria-current="page"{% endif %}>About</a>
-      </nav>
-    </header>
+  <body{% if page.layout == "home" %} class="home"{% endif %}>
+    <div class="page">
+      <header class="site-header">
+        <a class="site-mark" href="{{ '/' | relative_url }}" tabindex="-1" aria-hidden="true">{% include mark.html %}</a>
+        {%- if page.layout == "home" %}
+        <h1 class="site-name"><a href="{{ '/' | relative_url }}">{{ site.title }}</a></h1>
+        {%- else %}
+        <p class="site-name"><a href="{{ '/' | relative_url }}">{{ site.title }}</a></p>
+        {%- endif %}
+        <nav>
+          <a href="{{ '/about/' | relative_url }}"{% if page.url == "/about/" %} aria-current="page"{% endif %}>About</a>
+        </nav>
+      </header>
 
-    <article>
-      {{ content }}
-    </article>
+      <main>
+        {{ content }}
+      </main>
 
-    <footer>
-      <hr>
-      <p class="credits">
+      <footer class="site-footer">
         <a href="https://github.com/{{ site.author.github }}">GitHub</a>
-        <a href="{{ '/feed.xml' | relative_url }}">RSS</a>
-      </p>
-    </footer>
+        <a href="{{ '/feed.xml' | relative_url }}">RSS feed</a>
+      </footer>
+    </div>
     {% include scripts.html %}
   </body>
 </html>

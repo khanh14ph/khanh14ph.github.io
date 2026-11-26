@@ -2,7 +2,15 @@
 
 Personal blog, built with [Jekyll](https://jekyllrb.com/) and hosted on GitHub Pages.
 
-The design is a small hand-written Tufte-style theme (cream page, [ET Book](https://github.com/edwardtufte/et-book) serif, a text column with a wide right margin for sidenotes), modelled on [siboehm.com](https://siboehm.com/). There is no JavaScript apart from MathJax and Mermaid, which load only on pages that use them.
+The design is a small hand-written theme built around the idea of a worklog:
+
+- A left gutter holds dates, separated from the text by a thin margin line, like a logbook.
+- Prose stays in one narrow column. Code blocks and wide figures may run out into the right margin, which is also where sidenotes go.
+- Type is [IBM Plex](https://github.com/IBM/plex): Serif for titles, Sans for text, Mono for code.
+- Colours are a cool white page, green links and a little copper, with a dark version that follows the reader's system setting.
+- The mark in the header (and the favicon) is a 4x4 block with one row and one column picked out: a matrix product.
+
+There is no JavaScript apart from MathJax and Mermaid, which load only on pages that use them.
 
 ## Layout
 
@@ -11,9 +19,9 @@ The design is a small hand-written Tufte-style theme (cream page, [ET Book](http
 | `_posts/` | Blog posts, `YYYY-MM-DD-title.md` |
 | `_pages/` | `home.md` (`/`, intro text above the post list), `about.md` (`/about/`), `404.md` |
 | `_layouts/` | `default` (page shell), `home` (post list), `post`, `page` |
-| `_includes/` | `head.html`, `scripts.html` (MathJax/Mermaid), `sidenote.html` |
-| `assets/css/style.css` | The whole stylesheet; colours, fonts and column width are variables at the top |
-| `assets/fonts/et-book/` | ET Book web fonts (MIT) |
+| `_includes/` | `head.html`, `scripts.html` (MathJax/Mermaid), `mark.html` (the logo), `sidenote.html` |
+| `assets/css/style.css` | The whole stylesheet; colours, fonts and track widths are variables near the top |
+| `assets/fonts/plex/` | IBM Plex web fonts (OFL), Latin and Vietnamese subsets |
 | `images/` | Post images and favicons |
 
 ## Writing a post
@@ -34,7 +42,7 @@ categories:
 - Reference images with an absolute path, e.g. `![caption](/images/figure.png)`.
 - Math: `$$ ... $$`, inline or on its own line (MathJax).
 - Diagrams: a fenced code block with the language `mermaid`.
-- Sidenotes go in the right margin (tap the number to open them on a phone). The `id` must be unique within the post:
+- Sidenotes go in the right margin on wide screens (elsewhere, tap the number to open them). The `id` must be unique within the post:
 
   ```liquid
   Some text.{% include sidenote.html id="1" text="A note with *markdown* in it." %}

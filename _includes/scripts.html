@@ -3,6 +3,11 @@
   page contains kramdown math output, Mermaid when it has a ```mermaid block.
 {%- endcomment -%}
 {%- if content contains '\(' or content contains '\[' %}
+<script>
+  // The body text is a sans with a tall x-height; left to match it, MathJax
+  // sets the formulas visibly larger than the words around them.
+  window.MathJax = { chtml: { matchFontHeight: false, scale: 1.06 } };
+</script>
 <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script"></script>
 {%- endif %}
 {%- if content contains 'language-mermaid' %}
