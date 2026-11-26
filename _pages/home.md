@@ -15,4 +15,4 @@ redirect_from:
   - /books/
 ---
 
-Hi, I am Khanh Nguyen. I am a High Performance Computing (HPC) Engineer with a strong focus on GPU computing and Artificial Intelligence.
+Hi, I am Khanh Nguyen.

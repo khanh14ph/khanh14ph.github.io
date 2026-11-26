@@ -70,12 +70,10 @@ timezone: Etc/UTC
 
 # Plugins
 plugins:
-  - jekyll-feed
   - jekyll-sitemap
   - jekyll-redirect-from
 
 # Mimic GitHub Pages with --safe
 whitelist:
-  - jekyll-feed
   - jekyll-sitemap
   - jekyll-redirect-from

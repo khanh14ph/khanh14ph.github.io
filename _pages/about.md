@@ -16,6 +16,8 @@ My work involves optimizing complex algorithms to run efficiently on parallel ar
   * *Bachelor of Science in Artificial Intelligence and Data Science*
 
 ## Professional Experience
+* **Moreh** (June 2026 - Sept 2026)
+  * *GPU Engineer Intern*
 * **Viettel AI** (May 2023 - July 2025)
   * *Machine Learning Engineer*
 * **Vbee.ai** (June 2022 - Feb 2023)
