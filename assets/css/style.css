@@ -1,0 +1,602 @@
+/*
+ * A small Tufte-style stylesheet: cream page, ET Book serif, one red accent,
+ * a text column on the left and a wide right margin reserved for sidenotes.
+ */
+
+/* ---------- Fonts (ET Book, MIT licensed, see assets/fonts/et-book/LICENSE) */
+
+@font-face {
+  font-family: "et-book";
+  src: url("../fonts/et-book/et-book-roman-line-figures.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "et-book";
+  src: url("../fonts/et-book/et-book-display-italic-old-style-figures.woff") format("woff");
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "et-book";
+  src: url("../fonts/et-book/et-book-bold-line-figures.woff") format("woff");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "et-book-roman-old-style";
+  src: url("../fonts/et-book/et-book-roman-old-style-figures.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ---------- Tokens */
+
+:root {
+  --bg: #fffff8;
+  --text: #111;
+  --muted: #555;
+  --accent: #a00000;
+  --rule: #333;
+  --stripe: #fbf7f0;
+  --code-bg: #fff;
+  --code-border: #999;
+
+  --serif: et-book, Palatino, "Palatino Linotype", "Palatino LT STD", "Book Antiqua", Georgia, serif;
+  --sans: "Gill Sans", "Gill Sans MT", Lato, Calibri, sans-serif;
+  --mono: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+
+  /* The text column is this share of the page; the rest is margin. */
+  --column: 55%;
+}
+
+/* ---------- Base */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+/* Everything below is sized in rem, so the whole page scales with the viewport. */
+html {
+  font-size: 75%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+@media (min-width: 900px) {
+  html { font-size: 81.25%; }
+}
+
+@media (min-width: 1100px) {
+  html { font-size: 87.5%; }
+}
+
+body {
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding-left: 10.5%;
+  font-family: var(--serif);
+  background-color: var(--bg);
+  color: var(--text);
+  counter-reset: sidenote-counter;
+}
+
+::selection {
+  background: #b4d5fe;
+}
+
+/* ---------- Header and footer */
+
+header nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 2.4rem;
+  padding-top: 3.5rem;
+}
+
+header nav a,
+.credits a {
+  font-family: var(--sans);
+  font-size: 1.2rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+header nav a.active::before { content: "<"; }
+header nav a.active::after { content: ">"; }
+
+footer {
+  width: var(--column);
+  padding-bottom: 4rem;
+}
+
+.credits {
+  display: flex;
+  justify-content: center;
+  gap: 2.4rem;
+  margin: 0;
+}
+
+.credits a {
+  font-size: 1rem;
+  text-decoration: none;
+}
+
+/* ---------- Text */
+
+article {
+  position: relative;
+  width: var(--column);
+  padding: 5rem 0;
+  /* Matches paragraph text, so display math and other bare blocks size the same. */
+  font-size: 1.4rem;
+  line-height: 2rem;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-weight: 400;
+  text-wrap: balance;
+}
+
+h1 {
+  margin-top: 1.568rem;
+  margin-bottom: 1.568rem;
+  font-size: 2.5rem;
+  line-height: 1.184;
+}
+
+h2 {
+  margin-top: 2.8rem;
+  margin-bottom: 0;
+  font-size: 2.1rem;
+  line-height: 1.15;
+}
+
+h3 {
+  margin-top: 2.2rem;
+  margin-bottom: 0;
+  font-size: 1.8rem;
+  font-style: italic;
+  line-height: 1.1;
+}
+
+h4 {
+  margin-top: 1.8rem;
+  margin-bottom: 0;
+  font-size: 1.4rem;
+  font-style: italic;
+  line-height: 1.4;
+}
+
+p,
+ol,
+ul,
+dl {
+  margin: 1.4rem 0;
+  font-size: 1.4rem;
+  line-height: 2rem;
+}
+
+p,
+li {
+  text-align: justify;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+}
+
+ol,
+ul {
+  padding-left: 6%;
+}
+
+li {
+  margin-bottom: 0.5em;
+}
+
+li > ul,
+li > ol {
+  margin: 0.5em 0 0;
+}
+
+li > p {
+  margin: 0.7rem 0;
+}
+
+strong {
+  font-weight: bold;
+}
+
+hr {
+  height: 1px;
+  margin: 2.8rem 0;
+  border: 0;
+  background-image: linear-gradient(to right, transparent, rgba(0, 0, 0, 0.75), transparent);
+}
+
+footer hr {
+  margin: 1.4rem 0;
+}
+
+blockquote {
+  margin: 1.4rem 0;
+  padding: 0 2.8rem;
+}
+
+blockquote p {
+  font-size: 1.3rem;
+  line-height: 1.9rem;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+p:has(> img:only-child) {
+  text-align: center;
+}
+
+figure {
+  margin: 2.8rem 0;
+}
+
+figcaption {
+  margin-top: 0.5rem;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+/* ---------- Links */
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+/* Links in running text keep the text colour and get a hairline underline. */
+p > a,
+li > a,
+td > a,
+dd > a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+
+a:hover {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+
+a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* ---------- Homepage listing */
+
+.content-listing {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.content-listing li {
+  margin: 0;
+  padding-top: 1.4rem;
+}
+
+.content-listing h2 {
+  margin-top: 1.4rem;
+  line-height: 1.2;
+  text-wrap: pretty;
+}
+
+/* Sidenotes belong to the post itself, not to its excerpt. */
+.content-listing .sidenote,
+.content-listing .margin-toggle {
+  display: none;
+}
+
+/* ---------- Post header */
+
+.post-date {
+  text-align: right;
+}
+
+/* ---------- Code */
+
+pre,
+code {
+  font-family: var(--mono);
+  font-size: 1rem;
+  line-height: 1.42;
+  hyphens: none;
+  -webkit-hyphens: none;
+}
+
+/* Inline code sits in 1.4rem text, so it needs to be a little larger than a block. */
+p > code,
+li > code,
+td > code,
+a > code,
+strong > code,
+em > code {
+  font-size: 0.8em;
+}
+
+h2 code,
+h3 code {
+  font-size: 0.8em;
+}
+
+pre {
+  margin: 1.4rem 0;
+  padding: 0.7rem 0.9rem;
+  overflow-x: auto;
+  text-align: left;
+  background: var(--code-bg);
+  border: 1.5px solid var(--code-border);
+  border-radius: 4px;
+  tab-size: 4;
+}
+
+/* Rouge token colours */
+.highlight .c, .highlight .ch, .highlight .cd, .highlight .cm, .highlight .cpf,
+.highlight .c1 { color: #8a8a78; font-style: italic; }
+.highlight .cp, .highlight .cs { color: #777; font-weight: bold; }
+.highlight .err { color: inherit; background: none; }
+.highlight .k, .highlight .kc, .highlight .kd, .highlight .kn, .highlight .kp,
+.highlight .kr, .highlight .kv, .highlight .o, .highlight .ow { font-weight: bold; }
+.highlight .kt, .highlight .nc { color: #445588; font-weight: bold; }
+.highlight .m, .highlight .mb, .highlight .mf, .highlight .mh, .highlight .mi,
+.highlight .il, .highlight .mo, .highlight .mx { color: #007a7a; }
+.highlight .s, .highlight .sa, .highlight .sb, .highlight .sc, .highlight .dl,
+.highlight .sd, .highlight .s2, .highlight .se, .highlight .sh, .highlight .si,
+.highlight .sx, .highlight .s1 { color: #c41a3a; }
+.highlight .sr { color: #00802b; }
+.highlight .ss { color: #990073; }
+.highlight .na, .highlight .no, .highlight .nv, .highlight .vc, .highlight .vg,
+.highlight .vi { color: #007a7a; }
+.highlight .nb { color: #0077a3; }
+.highlight .ne, .highlight .nf, .highlight .fm { color: #990000; font-weight: bold; }
+.highlight .nn { color: #555; }
+.highlight .nt { color: #000080; }
+.highlight .ni { color: #800080; }
+.highlight .bp { color: #777; }
+.highlight .gd { background-color: #ffdddd; }
+.highlight .gi { background-color: #ddffdd; }
+.highlight .ge { font-style: italic; }
+.highlight .gs { font-weight: bold; }
+.highlight .gh, .highlight .gu { color: #777; }
+.highlight .go { color: #777; }
+.highlight .gp { color: #555; }
+
+/* ---------- Tables */
+
+table {
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  margin: 2.1rem auto;
+  overflow-x: auto;
+  border-top: 2px solid var(--rule);
+  border-bottom: 2px solid var(--rule);
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+th,
+td {
+  padding: 0.3rem 1rem;
+  font-size: 1.2rem;
+  line-height: 1.7;
+  text-align: left;
+  font-variant-numeric: tabular-nums;
+}
+
+th {
+  font-weight: normal;
+  border-bottom: 1px solid var(--rule);
+}
+
+tbody tr:nth-child(odd) {
+  background-color: var(--stripe);
+}
+
+/* ---------- Sidenotes
+ *
+ * The sidenote include (_includes/sidenote.html) puts a numbered note in the
+ * right margin. On narrow screens the note is hidden until its number is tapped.
+ */
+
+.sidenote,
+.marginnote {
+  float: right;
+  clear: right;
+  position: relative;
+  width: 50%;
+  margin-top: 0.3rem;
+  margin-right: -60%;
+  margin-bottom: 1.4rem;
+  font-size: 1.1rem;
+  line-height: 1.4;
+  text-align: left;
+  hyphens: manual;
+  -webkit-hyphens: manual;
+}
+
+li .sidenote,
+li .marginnote {
+  margin-right: -64%;
+}
+
+.sidenote-number {
+  counter-increment: sidenote-counter;
+}
+
+.sidenote-number::after,
+.sidenote::before {
+  font-family: "et-book-roman-old-style", var(--serif);
+  color: var(--accent);
+  position: relative;
+  vertical-align: baseline;
+}
+
+.sidenote-number::after {
+  content: counter(sidenote-counter);
+  top: -0.5rem;
+  left: 0.1rem;
+  font-size: 1rem;
+}
+
+.sidenote::before {
+  content: counter(sidenote-counter) ". ";
+}
+
+.sidenote a,
+.marginnote a {
+  color: var(--accent);
+}
+
+input.margin-toggle {
+  display: none;
+}
+
+/* Kramdown footnotes ([^1]) collect at the end of the post. */
+.footnotes {
+  margin-top: 4.2rem;
+}
+
+.footnotes p,
+.footnotes ol {
+  font-size: 1.2rem;
+  line-height: 1.7rem;
+}
+
+sup {
+  font-size: 0.7em;
+  line-height: 0;
+}
+
+/* A rendered Mermaid diagram is a figure, not a code listing. */
+pre:has(> code.language-mermaid) {
+  padding: 0;
+  text-align: center;
+  background: none;
+  border: 0;
+}
+
+/* ---------- Math */
+
+mjx-container[display="true"] {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.2rem 0;
+}
+
+/* ---------- Narrow screens */
+
+@media (max-width: 760px) {
+  html { font-size: 81.25%; }
+
+  body {
+    padding: 0 6%;
+  }
+
+  header nav {
+    padding-top: 2.4rem;
+  }
+
+  article,
+  footer {
+    width: 100%;
+  }
+
+  article {
+    padding: 3rem 0;
+  }
+
+  p,
+  li {
+    text-align: left;
+  }
+
+  blockquote {
+    padding: 0 1.4rem;
+  }
+
+  label.margin-toggle {
+    cursor: pointer;
+  }
+
+  .sidenote,
+  .marginnote,
+  li .sidenote,
+  li .marginnote {
+    display: none;
+    float: left;
+    clear: both;
+    width: 100%;
+    margin: 1rem 0;
+    padding: 0 5%;
+  }
+
+  .margin-toggle:checked + .sidenote,
+  .margin-toggle:checked + .marginnote {
+    display: block;
+  }
+}
+
+/* ---------- Print */
+
+@media print {
+  body {
+    padding: 0;
+    background: none;
+  }
+
+  header,
+  footer {
+    display: none;
+  }
+
+  article {
+    width: 100%;
+    padding: 0;
+  }
+
+  pre,
+  img,
+  tr {
+    break-inside: avoid;
+  }
+
+  h2,
+  h3 {
+    break-after: avoid;
+  }
+}

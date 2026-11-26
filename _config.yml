@@ -1,46 +1,33 @@
 # Site settings
 locale                   : "en-US"
-site_theme               : "default" # "default", "air", "sunrise", "mint", "dirt" or "contrast"
 title                    : "Khanh Nguyen"
-title_separator          : "-"
-name                     : &name "Khanh Nguyen"
-description              : &description "High Performance Computing Engineer focusing on GPU and AI"
+description              : "High Performance Computing Engineer focusing on GPU and AI"
 url                      : https://khanh14ph.github.io
 baseurl                  : ""
 repository               : "khanh14ph/khanh14ph.github.io"
 
-# Author sidebar. Any blank/absent field is simply not rendered.
-# See _includes/author-profile.html for the full list of supported fields.
 author:
-  avatar           : "avatar.jpeg"
   name             : "Khanh Nguyen"
-  bio              : "High Performance Computing Engineer, focusing on GPU and AI."
-  location         : "Earth"
-  email            : "khanh14ph@gmail.com"
   github           : "khanh14ph"
 
 # Reading
-words_per_minute         : 160
 future                   : true
 encoding                 : "utf-8"
 markdown_ext             : "markdown,mkdown,mkdn,mkd,md"
 include:
-  - .htaccess
   - _pages
 exclude:
   - .bundle
   - .github
   - .sass-cache
-  - assets/js/_main.js
-  - assets/js/plugins
-  - assets/js/vendor
   - Dockerfile
   - docker-compose.yaml
   - Gemfile
+  - Gemfile.lock
   - LICENSE
   - local
   - node_modules
-  - package.json*
+  - push.sh
   - README.md
   - vendor
 keep_files:
@@ -50,6 +37,7 @@ keep_files:
 markdown: kramdown
 highlighter: rouge
 lsi: false
+# The first paragraph of a post is its excerpt, shown on the homepage.
 excerpt_separator: "\n\n"
 incremental: false
 
@@ -69,21 +57,12 @@ defaults:
       path: ""
       type: posts
     values:
-      layout: single
-      author_profile: true
-      read_time: true
-      share: true
+      layout: post
   - scope:
       path: ""
       type: pages
     values:
-      layout: single
-      author_profile: true
-
-# Sass/SCSS
-sass:
-  sass_dir: _sass
-  style: compressed
+      layout: page
 
 # Outputting
 permalink: /:categories/:title/
@@ -100,9 +79,3 @@ whitelist:
   - jekyll-feed
   - jekyll-sitemap
   - jekyll-redirect-from
-
-# HTML Compression - https://jch.penibelst.de/
-compress_html:
-  clippings: all
-  ignore:
-    envs: development

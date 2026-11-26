@@ -105,9 +105,15 @@ __global__ void gemm_v2(int m, int n, int k, T alpha, T const* A, T const* B, T 
 }
 ```
 
-**14.95 ms, 9.19 TFLOPS (1.55×).** Every multiply-add now needs two loads from shared memory.
+Warp Cycles Per Issued Instruction [cycle]	43.85
 
-## v3: 1D Block Tiling
+One or More Eligible [%]	36.32
+
+![alt text](/images/gemm_v2_instruction_stat.png)
+
+Most of the instruction is loading from shared memory, we can optimize further by assign more work to each threads.
+
+## v3: 1D Blocktiling
 
 Each block computes a $$64 \times 64$$ tile, stepping through $$K$$ by 8, and each of its 512 threads computes 8 outputs in one column. A thread loads one value of $$B$$ into a register and reuses it for 8 multiply-adds, which cuts shared-memory loads from 2 to about 1.1 per multiply-add.
 
@@ -161,8 +167,81 @@ __global__ void gemm_v3(int m, int n, int k, T alpha, T const* A, T const* B, T 
     }
 }
 ```
+Warp Cycles Per Issued Instruction [cycle]	17.37
 
-**7.64 ms, 17.98 TFLOPS (1.96×).**
+One or More Eligible [%]	44.84
+
+![alt text](/images/gemm_v3_instruction_stat.png)
+
+## v4: 2D Blocktiling
+
+```cpp
+template <typename T, int BM, int BN, int BK, int TM, int TN>
+__global__ void gemm_v4(int m, int n, int k, T alpha, T const* A, T const* B, T beta, T* C) {
+    constexpr int NT = BM * BN / (TM*TN);  // threads per block
+    __shared__ T A_shared[BM * BK];
+    __shared__ T B_shared[BK * BN];
+    int const tid = threadIdx.x;
+    int const threadRow = tid / (BN/TN);
+    int const threadCol = tid % (BN/TN);
+
+    A += BM * blockIdx.y * k;
+    B += BN * blockIdx.x;
+    C += BM * blockIdx.y * n + BN * blockIdx.x;
+
+    T threadResult[TM][TN] = {0};
+
+    for (int kk = 0; kk < k; kk += BK) {
+        // cooperative load: Since the number of threads in each block is NT now, each thread loads (BM*BK)/NT elements in A  and
+        // (BK*BN)/NT elements in B 
+        
+        for (int s = 0; s < (BM * BK) / NT; ++s) {
+            int const idx = tid + s * NT;
+            int const r = idx / BK, c = idx % BK;
+            A_shared[r * BK + c] = A[r * k + c];
+        }
+
+        for (int s = 0; s < (BK * BN) / NT; ++s) {
+            int const idx = tid + s * NT;
+            int const r = idx / BN, c = idx % BN;
+            B_shared[r * BN + c] = B[r * n + c];
+        }
+        __syncthreads();
+
+        A += BK;
+        B += BK * n;
+        T regM[TM]={0};
+        T regN[TN]={0};
+        for (int i = 0; i < BK; ++i) {
+            for (int tm=0; tm < TM; tm++){
+                regM[tm]=A_shared[(threadRow*TM+tm)*BK+i];
+            }
+            for (int tn=0; tn < TN; tn++){
+                regN[tn]=B_shared[i*BN+threadCol*TN+tn];
+            }
+            for (int r = 0; r < TM; r++) {
+                for (int r1 = 0; r1<TN; r1++){
+                    threadResult[r][r1]+= regM[r]*regN[r1];
+                }
+                
+               
+            }
+        }
+        __syncthreads();
+    }
+
+    for (int r = 0; r < TM; r++) {
+        int row = threadRow*TM + r;
+        for (int r1 = 0; r1 < TN; r1++){
+            C[row*n+threadCol*TN+r1]=alpha*threadResult[r][r1] + beta*C[row*n+threadCol*TN+r1];
+        }
+
+    }
+}
+
+
+```
+
 
 ## Results
 
@@ -172,6 +251,7 @@ __global__ void gemm_v3(int m, int n, int k, T alpha, T const* A, T const* B, T 
 | v1: memory coalescing | 23.13 | 5.94 | 11.5% |
 | v2: shared memory tiling | 14.95 | 9.19 | 17.7% |
 | v3: 1D block tiling | 7.64 | 17.98 | 34.7% |
+| v4: 2D block tiling | 5.29 | 25.96 | % |
 | cuBLAS | 2.65 | 51.82 | 100% |
 
 Next: 2D block tiling, vectorized loads and warp tiling, then FP16 on Tensor Cores.

@@ -1,16 +1,13 @@
 ---
-permalink: /
+permalink: /about/
 title: "About Me"
-redirect_from: 
-  - /about/
+redirect_from:
   - /about.html
 ---
 
-Hi, I am Khanh Nguyen. I am a High Performance Computing (HPC) Engineer with a strong focus on GPU computing and Artificial Intelligence. 
+Hi, I am Khanh Nguyen. I am a High Performance Computing (HPC) Engineer with a strong focus on GPU computing and Artificial Intelligence.
 
-My work involves optimizing complex algorithms to run efficiently on parallel architectures, leveraging the power of GPUs to accelerate AI workloads, and building scalable HPC infrastructure. 
-
-Welcome to my portfolio! Here you can find more about my projects, publications, and experience in the field of high-performance computing.
+My work involves optimizing complex algorithms to run efficiently on parallel architectures, leveraging the power of GPUs to accelerate AI workloads, and building scalable HPC infrastructure.
 
 ## Education
 * **The University of Chicago** (Sept 2025 - Dec 2026)

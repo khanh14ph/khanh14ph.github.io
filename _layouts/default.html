@@ -1,26 +1,27 @@
----
-layout: compress
----
-
-{% include base_path %}
-
 <!doctype html>
-<html lang="{{ site.locale | slice: 0,2 }}" class="no-js"{% if site.site_theme == "dark" %} data-theme="dark"{% endif %}>
+<html lang="{{ site.locale | slice: 0, 2 | default: 'en' }}">
   <head>
     {% include head.html %}
-    {% include head/custom.html %}
   </head>
-
   <body>
+    <header>
+      <nav>
+        <a href="{{ '/' | relative_url }}"{% if page.url == "/" %} class="active" aria-current="page"{% endif %}>{{ site.title }}</a>
+        <a href="{{ '/about/' | relative_url }}"{% if page.url == "/about/" %} class="active" aria-current="page"{% endif %}>About</a>
+      </nav>
+    </header>
 
-    {% include browser-upgrade.html %}
-    {% include masthead.html %}
+    <article>
+      {{ content }}
+    </article>
 
-    {{ content }}
-
-    {% include footer/custom.html %}
-
+    <footer>
+      <hr>
+      <p class="credits">
+        <a href="https://github.com/{{ site.author.github }}">GitHub</a>
+        <a href="{{ '/feed.xml' | relative_url }}">RSS</a>
+      </p>
+    </footer>
     {% include scripts.html %}
-
   </body>
 </html>

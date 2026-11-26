@@ -1,0 +1,16 @@
+---
+layout: default
+---
+
+<h1>{{ page.title | default: site.title }}</h1>
+
+{{ content }}
+
+<ul class="content-listing">
+  {%- for post in site.posts %}
+  <li>
+    <h2><a href="{{ post.url | relative_url }}">{{ post.title | markdownify | remove: "<p>" | remove: "</p>" | strip }}</a></h2>
+    {{ post.excerpt }}
+  </li>
+  {%- endfor %}
+</ul>

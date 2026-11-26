@@ -1,0 +1,8 @@
+---
+layout: default
+---
+
+<h1>{{ page.title | markdownify | remove: "<p>" | remove: "</p>" | strip }}</h1>
+<p class="post-date"><time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %Y" }}</time></p>
+
+{{ content }}

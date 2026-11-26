@@ -1,1 +1,14 @@
-<script type="module" src="{{ base_path }}/assets/js/main.min.js"></script>
+{%- comment -%}
+  Scripts are only loaded on pages that need them: MathJax when the rendered
+  page contains kramdown math output, Mermaid when it has a ```mermaid block.
+{%- endcomment -%}
+{%- if content contains '\(' or content contains '\[' %}
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script"></script>
+{%- endif %}
+{%- if content contains 'language-mermaid' %}
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({ startOnLoad: false, theme: 'neutral' });
+  await mermaid.run({ querySelector: 'code.language-mermaid' });
+</script>
+{%- endif %}

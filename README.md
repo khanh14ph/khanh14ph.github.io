@@ -1,19 +1,20 @@
 # khanh14ph.github.io
 
-Personal site, built with [Jekyll](https://jekyllrb.com/) and hosted on GitHub Pages.
-Originally derived from [academicpages](https://github.com/academicpages/academicpages.github.io) (MIT), since trimmed to only what this site uses.
+Personal blog, built with [Jekyll](https://jekyllrb.com/) and hosted on GitHub Pages.
+
+The design is a small hand-written Tufte-style theme (cream page, [ET Book](https://github.com/edwardtufte/et-book) serif, a text column with a wide right margin for sidenotes), modelled on [siboehm.com](https://siboehm.com/). There is no JavaScript apart from MathJax and Mermaid, which load only on pages that use them.
 
 ## Layout
 
 | Path | What it holds |
 | --- | --- |
-| `_pages/` | Standalone pages: about (`/`), blog index, per-category blog pages, projects, books, research, 404 |
 | `_posts/` | Blog posts, `YYYY-MM-DD-title.md` |
-| `_data/` | `navigation.yml` (header links), `projects.yml`, `books.yml`, `ui-text.yml` |
-| `_layouts/` | `default`, `single` (pages/posts), `archive` (listings), `compress` |
-| `_includes/` | Shared fragments — masthead, author sidebar, post listing, SEO |
-| `_sass/`, `assets/` | Styles and compiled JS; theme is set by `site_theme` in `_config.yml` |
-| `images/` | Avatar and favicons |
+| `_pages/` | `home.md` (`/`, intro text above the post list), `about.md` (`/about/`), `404.md` |
+| `_layouts/` | `default` (page shell), `home` (post list), `post`, `page` |
+| `_includes/` | `head.html`, `scripts.html` (MathJax/Mermaid), `sidenote.html` |
+| `assets/css/style.css` | The whole stylesheet; colours, fonts and column width are variables at the top |
+| `assets/fonts/et-book/` | ET Book web fonts (MIT) |
+| `images/` | Post images and favicons |
 
 ## Writing a post
 
@@ -28,28 +29,16 @@ categories:
 ---
 ```
 
-The `categories` value routes the post to a section page. Existing sections and their
-categories: GPU (`GPU`), Computer Architecture (`Computer Architecture`), OS
-(`Operating System`), C++ (`C++`), Python (`Python`), Research (`Research`).
+- The first paragraph is the excerpt shown on the homepage.
+- `categories` only affects the URL (`/gpu/my-title/`); it can be left out.
+- Reference images with an absolute path, e.g. `![caption](/images/figure.png)`.
+- Math: `$$ ... $$`, inline or on its own line (MathJax).
+- Diagrams: a fenced code block with the language `mermaid`.
+- Sidenotes go in the right margin (tap the number to open them on a phone). The `id` must be unique within the post:
 
-MathJax and Mermaid are available in posts (see `_includes/footer/custom.html`).
-
-## Adding a section
-
-1. Create `_pages/blog-<name>.html`:
-
-   ```
-   ---
-   layout: archive
-   permalink: /blog/<name>/
-   title: "Blog: <Name>"
-   category: <Category>
-   ---
-
-   {% include posts-by-category.html %}
-   ```
-
-2. Add the link to `_data/navigation.yml`.
+  ```liquid
+  Some text.{% include sidenote.html id="1" text="A note with *markdown* in it." %}
+  ```
 
 ## Running locally
 
