@@ -24,7 +24,6 @@ exclude:
   - docker-compose.yaml
   - Gemfile
   - Gemfile.lock
-  - LICENSE
   - local
   - node_modules
   - push.sh
