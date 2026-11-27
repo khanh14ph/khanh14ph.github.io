@@ -242,17 +242,105 @@ __global__ void gemm_v4(int m, int n, int k, T alpha, T const* A, T const* B, T 
 
 ```
 
+## v5: Vectorized load
 
+```cpp
+template <typename T, int BM, int BN, int BK, int TM, int TN>
+__global__ void gemm_v4(int m, int n, int k, T alpha, T const* A, T const* B, T beta, T* C) {
+    constexpr int NT = BM * BN / (TM*TN);  // threads per block
+    __shared__ T A_shared[BM * BK];
+    __shared__ T B_shared[BK * BN];
+    int const tid = threadIdx.x;
+    int const threadRow = tid / (BN/TN);
+    int const threadCol = tid % (BN/TN);
+
+    A += BM * blockIdx.y * k;
+    B += BN * blockIdx.x;
+    C += BM * blockIdx.y * n + BN * blockIdx.x;
+
+    T threadResult[TM][TN] = {0};
+
+    for (int kk = 0; kk < k; kk += BK) {
+        // cooperative load: Since the number of threads in each block is NT now, each thread loads (BM*BK)/NT elements in A  and
+        // (BK*BN)/NT elements in B 
+         
+        for (int s = 0; s < (BM * BK) / (NT*4); ++s) {
+            int const idx = 4*tid + s * NT;
+            int const r = idx / BK, c = idx % BK;
+            float4 tmp = *reinterpret_cast<const float4*>(&A[r*k+c]);
+            A_shared[c*BN+r] = tmp.x;
+            A_shared[(c+1)*BN+r] = tmp.y;
+            A_shared[(c+2)*BN+r] = tmp.z;
+            A_shared[(c+3)*BN+r] = tmp.w;
+
+        }
+
+        for (int s = 0; s < (BK * BN) / (NT*4); ++s) {
+            int const idx = tid*4 + s * NT;
+            int const r = idx / BN, c = idx % BN;
+            float4 tmp = *reinterpret_cast<const float4*>(&B[r * n + c]);
+            B_shared[r * BN + c] = tmp.x;
+            B_shared[r * BN + c+1] =tmp.y;
+            B_shared[r * BN + c+2] = tmp.z;
+            B_shared[r * BN + c+3] = tmp.w;
+        }
+        __syncthreads();
+
+        A += BK;
+        B += BK * n;
+        T regM[TM]={0};
+        T regN[TN]={0};
+        for (int i = 0; i < BK; ++i) {
+            for (int tm=0; tm < TM; tm++){
+                regM[tm]=A_shared[i*BM+ threadRow*TM+tm];
+            }
+            for (int tn=0; tn < TN; tn++){
+                regN[tn]=B_shared[i*BN+threadCol*TN+tn];
+            }
+            for (int r = 0; r < TM; r++) {
+                for (int r1 = 0; r1<TN; r1++){
+                    threadResult[r][r1]+= regM[r]*regN[r1];
+                }
+                
+               
+            }
+        }
+        __syncthreads();
+    }
+
+    for (int r = 0; r < TM; r++) {
+        int row = threadRow*TM + r;
+        for (int r1 = 0; r1 < TN; r1++){
+            C[row*n+threadCol*TN+r1]=alpha*threadResult[r][r1] + beta*C[row*n+threadCol*TN+r1];
+        }
+
+    }
+}
+```
+
+This method speed up our kernel, however, it trigger another problem, which is bank conflict:
+```cpp
+int idx = tid*4;            // warp: tid 0..31 → idx 0..124
+r = 0, c = 4*tid;
+B_shared[r*BN + c + j] = ...;   // word 4*tid + j → bank (4*tid + j) % 32
+```
+Threads tid, tid+8, tid+16 and tid+24 hit the same bank, so each of the four scalar stores is 4-way conflicted
+Fix: store the float4 in one instruction. A 128-bit STS to contiguous addresses is conflict-free:
+
+```cpp
+*reinterpret_cast<float4*>(&B_shared[r*BN + c]) = tmp;
+```
 ## Results
 
-| Kernel | Time (ms) | TFLOPS | % of cuBLAS |
-|---|---:|---:|---:|
-| v0: naive | 273.84 | 0.50 | 1.0% |
-| v1: memory coalescing | 23.13 | 5.94 | 11.5% |
-| v2: shared memory tiling | 14.95 | 9.19 | 17.7% |
-| v3: 1D block tiling | 7.64 | 17.98 | 34.7% |
-| v4: 2D block tiling | 5.29 | 25.96 | % |
-| cuBLAS | 2.65 | 51.82 | 100% |
+| Kernel | Time (ms) | TFLOPS
+|---|---:|---:|
+| v0: naive | 273.84 | 0.50 |
+| v1: memory coalescing | 23.13 | 5.94 |
+| v2: shared memory tiling | 14.95 | 9.19 |
+| v3: 1D block tiling | 7.64 | 17.98 |
+| v4: 2D block tiling | 5.29 | 25.96 |
+| v5: 2D block tiling | 4.48 | 30.64 | 
+| cuBLAS | 2.65 | 52.05 |
 
 Next: 2D block tiling, vectorized loads and warp tiling, then FP16 on Tensor Cores.
 
